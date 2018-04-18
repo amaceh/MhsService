@@ -26,7 +26,7 @@ $app->get("/matkul/{id}", function (Request $request, Response $response, $args)
     $id = $args["id"];
     $sql = "SELECT * FROM kuliah WHERE kode_mk=:id";
     $stmt = $this->db->prepare($sql);
-    $stmt->execute();
+    $stmt->execute([":id" => $id]);
     $result = $stmt->fetch();
     return $response->withJson(["status" => "success", "data" => $result], 200);
 });
@@ -43,17 +43,16 @@ $app->get("/matkul/search/", function (Request $request, Response $response, $ar
 
 $app->post("/matkul/", function (Request $request, Response $response){
 
-    $new_book = $request->getParsedBody();
+    $new_mk = $request->getParsedBody();
 
     $sql = "INSERT INTO kuliah (nama_mk, nama_dosen, sks) VALUE (:nama_mk, :nama_dosen, :sks)";
     $stmt = $this->db->prepare($sql);
 
     $data = [
-        ":nama_mk" => $new_book["nama_mk"],
-        ":nama_dosen" => $new_book["nama_dosen"],
-        ":sks" => $new_book["sks"]
+        ":nama_mk" => $new_mk["nama_mk"],
+        ":nama_dosen" => $new_mk["nama_dosen"],
+        ":sks" => $new_mk["sks"]
     ];
-    var_dump($new_book);
 
     if($stmt->execute($data))
        return $response->withJson(["status" => "success", "data" => "1"], 200);
@@ -64,15 +63,15 @@ $app->post("/matkul/", function (Request $request, Response $response){
 
 $app->put("/matkul/{id}", function (Request $request, Response $response, $args){
     $id = $args["id"];
-    $new_book = $request->getParsedBody();
+    $new_mk = $request->getParsedBody();
     $sql = "UPDATE kuliah SET nama_mk=:nama_mk, nama_dosen=:nama_dosen, sks=:sks WHERE kode_mk=:id";
     $stmt = $this->db->prepare($sql);
     
     $data = [
         ":id" => $id,
-        ":nama_mk" => $new_book["nama_mk"],
-        ":nama_dosen" => $new_book["nama_dosen"],
-        ":sks" => $new_book["sks"]
+        ":nama_mk" => $new_mk["nama_mk"],
+        ":nama_dosen" => $new_mk["nama_dosen"],
+        ":sks" => $new_mk["sks"]
     ];
 
     if($stmt->execute($data))
