@@ -13,7 +13,6 @@ $app->get('/[{name}]', function (Request $request, Response $response, array $ar
     return $this->renderer->render($response, 'index.phtml', $args);
 });
 
-//contoh get sederhana, tanpa pengecekan api
 $app->get("/matkul/", function (Request $request, Response $response){
     $sql = "SELECT * FROM kuliah";
     $stmt = $this->db->prepare($sql);
@@ -22,7 +21,7 @@ $app->get("/matkul/", function (Request $request, Response $response){
     return $response->withJson(["status" => "success", "data" => $result], 200);
 });
 
-$app->get("/matkul/{id}", function (Request $request, Response $response, $args){
+$app->get("/matkul/get/{id}/", function (Request $request, Response $response, $args){
     $id = $args["id"];
     $sql = "SELECT * FROM kuliah WHERE kode_mk=:id";
     $stmt = $this->db->prepare($sql);
@@ -38,7 +37,7 @@ $app->get("/matkul/search/", function (Request $request, Response $response, $ar
     $stmt->execute();
     $result = $stmt->fetchAll();
     return $response->withJson(["status" => "success", "data" => $result], 200);
-    var_dump($sql);
+    //var_dump($sql);
 });
 
 $app->post("/matkul/", function (Request $request, Response $response){
@@ -61,7 +60,7 @@ $app->post("/matkul/", function (Request $request, Response $response){
 });
 
 
-$app->put("/matkul/{id}", function (Request $request, Response $response, $args){
+$app->put("/matkul/{id}/", function (Request $request, Response $response, $args){
     $id = $args["id"];
     $new_mk = $request->getParsedBody();
     $sql = "UPDATE kuliah SET nama_mk=:nama_mk, nama_dosen=:nama_dosen, sks=:sks WHERE kode_mk=:id";
@@ -81,7 +80,7 @@ $app->put("/matkul/{id}", function (Request $request, Response $response, $args)
 });
 
 
-$app->delete("/matkul/{id}", function (Request $request, Response $response, $args){
+$app->delete("/matkul/{id}/", function (Request $request, Response $response, $args){
     $id = $args["id"];
     $sql = "DELETE FROM kuliah WHERE kode_mk=:id";
     $stmt = $this->db->prepare($sql);
